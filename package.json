@@ -1,0 +1,32 @@
+{
+  "name": "sdnv",
+  "version": "0.0.1",
+  "description": "Self-Delimiting Numeric Value Codec",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ruiquelhas/sdnv.git"
+  },
+  "keywords": [
+    "sdnv",
+    "codec",
+    "encoding",
+    "decoding",
+    "network",
+    "protocol"
+  ],
+  "author": {
+    "name": "Rui Quelhas",
+    "email": "rfpquelhas@gmail.com",
+    "url": "http://about.me/ruiquelhas"
+  },
+  "license": "MIT",
+  "gitHead": "28aa839ccc8030e2c57765099a4a42534b6c4e09",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/ruiquelhas/sdnv/issues"
+  }
+}
