@@ -14,10 +14,10 @@ test('make sure a valid buffer results in a valid SNDV', function (t) {
 
 test('make sure the SDNV is valid when no buffer is passed', function (t) {
   var emptyBufferSDNV = new SDNV(), expectedBuffer = new Buffer(1);
-  t.ok(emptyBufferSDNV instanceof SDNV, 'empty buffer should result in a \
-    default SDNV');
-  t.type(emptyBufferSDNV.buffer, "Buffer", 'default SDNV should contain \
-    buffer data');
+  t.ok(emptyBufferSDNV instanceof SDNV, 'empty buffer should result ' + 
+    'in a default SDNV');
+  t.type(emptyBufferSDNV.buffer, "Buffer", 'default SDNV should contain ' +
+    'buffer data');
   t.end();
 });
 
