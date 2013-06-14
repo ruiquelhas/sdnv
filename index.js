@@ -3,8 +3,12 @@ var encodeBuffer = function (buffer) {
 };
 
 var SDNV = function (buffer) { 
-  if (buffer !== null) {
-    this.buffer = encodeBuffer(buffer);
+  if (buffer !== undefined) {
+    if (buffer instanceof Buffer) {
+      this.buffer = encodeBuffer(buffer);
+    } else {
+      throw new Error('the argument should be a Buffer');
+    }
   } else {
     this.buffer = new Buffer(1);
   }
