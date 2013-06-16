@@ -27,20 +27,14 @@ var encodeBuffer = function (buffer, carry) {
   var x = getBufferLessSignicantSevenBits(bufferCopy);
   var y = carry || getBufferDecimalValue(bufferCopy) >>> 7;
 
-  if (y === 0) {
-    result = new Buffer([x]);
-  } else {
-    var z = MSB_VALUE | getBufferLessSignicantSevenBits(new Buffer([y]));
-    
-    y = y >>> 7;
-    if (y === 0) {
-      result = new Buffer([z, x]);
-    } else {
-      result = encodeBuffer(remaining, y >>> 7);
-    }
-  }
+  if (y === 0) return new Buffer([x]);
 
-  return result;
+  var z = MSB_VALUE | getBufferLessSignicantSevenBits(new Buffer([y]));
+  y = y >>> 7;
+  
+  if (y === 0) return new Buffer([z, x]);
+  
+  return encodeBuffer(remaining, y);
 };
 
 var SDNV = function (buffer) { 
