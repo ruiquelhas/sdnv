@@ -1,39 +1,46 @@
-var OCTET_DESCRIPTION_SIZE = 128;
+var MSB_VALUE = 128;
 
-var isSingleOctect = function (buffer) { 
-  return buffer.length < 2; 
+var getBufferCopy = function (buffer) {
+  var result = new Buffer(buffer.length);
+  buffer.copy(result);
+  return result;
 };
 
-var hasMSBEqualToZero = function(buffer) { 
-  return buffer[0] < OCTET_DESCRIPTION_SIZE; 
+var getBufferLessSignicantSevenBits = function(buffer) {
+  return (
+    buffer[buffer.length - 1] >= MSB_VALUE ?
+    buffer[buffer.length - 1] - MSB_VALUE :
+    buffer[buffer.length - 1]
+  );
 };
 
-var encodeBuffer = function (buffer) {
-  var bufferCopy = new Buffer(buffer.length);
-  buffer.copy(bufferCopy);
+var getBufferDecimalValue = function(buffer) {
+  var value = 0;
+  for (var i = 0, len = buffer.length; i < len; i++) {
+    value = value + buffer[i];
+  }
+  return value;
+};
 
-  // best case scenario (single octet with MSB = 0)
-  if (isSingleOctect(bufferCopy) && hasMSBEqualToZero(bufferCopy)) {
-    return bufferCopy;
+var encodeBuffer = function (buffer, carry) {
+  var bufferCopy = getBufferCopy(buffer), result;
+  var x = getBufferLessSignicantSevenBits(bufferCopy);
+  var y = carry || getBufferDecimalValue(bufferCopy) >>> 7;
+
+  if (y === 0) {
+    result = new Buffer([x]);
+  } else {
+    var z = MSB_VALUE | getBufferLessSignicantSevenBits(new Buffer([y]));
+    
+    y = y >>> 7;
+    if (y === 0) {
+      result = new Buffer([z, x]);
+    } else {
+      result = encodeBuffer(remaining, y >>> 7);
+    }
   }
 
-  // worst case scenario (single octet with MSB = 1)
-  if (isSingleOctect(bufferCopy) && !hasMSBEqualToZero(bufferCopy)) {
-    return new Buffer([0x7F]);
-  }
-
-  return new Buffer([0x7F]);
-
-  // var lastOctet = bufferCopy[bufferCopy.length - 1];
-  // var negativeMSBOctet = lastOctet - 128;
-  // bufferCopy[bufferCopy.length - 1] = negativeMSBOctet;
-  // var bitToShift = lastOctet < 128 ? 0 : 1;
-  // for (var i = 0, len = bufferCopy.length - 1; i < len; i++) {
-  //   var currentOctet = bufferCopy[i];
-  //   var positiveMSBOctect = (currentOctet * 2) + 128 + bitToShift;
-  //   bitToShift = bufferCopy[i] < 128 ? 0 : 1;
-  //   bufferCopy[i] = positiveMSBOctect;
-  // }
+  return result;
 };
 
 var SDNV = function (buffer) { 
