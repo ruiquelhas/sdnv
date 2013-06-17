@@ -4,7 +4,7 @@ SDNV
 Self-Delimiting Numeric Value Codec
 -----------------------------------
 
-Node.js wrapper for Self-Delimiting Numeric Values (SDNVs). Provides a base class to use SDNVs in Node programs and 
+Node.js wrapper for [Self-Delimiting Numeric Values](http://www.dtnrg.org/wiki/SDNV) (SDNVs). Provides a base class to use SDNVs in Node programs and 
 appropriate utility functions to encode and decode native buffers to and from SDNVs.
 
 ### What are SDNVs? ###
@@ -53,3 +53,7 @@ The following examples illustrate the encoding scheme for various hexadecimal va
              = 01111111
 
 ### How to use this module? ###
+
+### Any issue or enhancement? ###
+
+You know the [drill](https://github.com/ruiquelhas/sdnv/issues/new). However, you should also know that [Pull Requests](https://github.com/ruiquelhas/sdnv/pulls) are great!
