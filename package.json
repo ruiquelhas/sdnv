@@ -1,6 +1,6 @@
 {
   "name": "sdnv",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Self-Delimiting Numeric Value Codec",
   "main": "index.js",
   "devDependencies": {
