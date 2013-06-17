@@ -40,9 +40,9 @@ test('make sure the encoding works', function (t) {
   t.test('for a high 16-bit value scenario', function (ct) {
     runAssertions(new Buffer([0x12, 0x34]), new Buffer([0xA4, 0x34]), ct);
   });
-  // t.test('for a low 16-bit value scenario', function (ct) {
-  //   runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0xA4, 0x34]), ct);
-  // });
+  t.test('for a low 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0x95, 0x3C]), ct);
+  });
   t.end();
 });
 
