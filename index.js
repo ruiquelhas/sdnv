@@ -1,4 +1,8 @@
 var OCTET_MSB_VALUE = 128;
+var HIGH_ORDER_VALUE = 64;
+
+var OCTET_OVERFLOW = 256;
+var DOUBLE_OCTET_OVERFLOW = 65536;
 
 var getBufferCopy = function (buffer) {
   var result = new Buffer(buffer.length);
@@ -40,8 +44,41 @@ var encodeBuffer = function (buffer) {
   return encodeBuffer(remaining);
 };
 
+var getVariableLengthBuffer = function (decimalValue) {
+  var buffer;
+
+  if (decimalValue < OCTET_OVERFLOW) {
+    buffer = new Buffer(1);
+    buffer.writeUInt8(decimalValue, 0);
+    return buffer;
+  }
+
+  if (decimalValue < DOUBLE_OCTET_OVERFLOW) {
+    buffer = new Buffer(2);
+    buffer.writeUInt16BE(decimalValue, 0);
+    return buffer;
+  }
+
+  buffer = new Buffer(4);
+  buffer.writeUInt32BE(decimalValue, 0);
+  return buffer;
+};
+
 var decodeBuffer = function (buffer) {
-  return new Buffer([0x7F]);
+  var bufferCopy = getBufferCopy(buffer), result = 0;
+  
+  var sweep = function (index) {
+    result = result << 7;
+    var octetAsBuffer = new Buffer([bufferCopy[index]]);
+    var lowOrderWord = getBufferLessSignicantSevenBits(octetAsBuffer);
+    result = result + lowOrderWord;
+    if (lowOrderWord >= HIGH_ORDER_VALUE || index === bufferCopy.length - 1) {
+      return getVariableLengthBuffer(result);
+    }
+    return sweep(index + 1);
+  };
+
+  return sweep(0);
 };
 
 var SDNV = function (buffer) { 

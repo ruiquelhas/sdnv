@@ -61,8 +61,14 @@ test('make sure the decoding works', function (t) {
   t.test('for the 8-bit best case scenario', function (ct) {
     runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), new Buffer([0x7F]), ct);
   });
-  // t.test('for the 8-bit worst case scenario', function (ct) {
-  //   runAssertions(new Buffer([0x8F]), new Buffer([0x81, 0x0F]), new Buffer([0x8F]), ct);
-  // });
+  t.test('for the 8-bit worst case scenario', function (ct) {
+    runAssertions(new Buffer([0x8F]), new Buffer([0x81, 0x0F]), new Buffer([0x8F]), ct);
+  });
+  t.test('for a high 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x12, 0x34]), new Buffer([0xA4, 0x34]), new Buffer([0x12, 0x34]), ct);
+  });
+  t.test('for a low 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0x95, 0x3C]), new Buffer([0x0A, 0xBC]), ct);
+  });
   t.end();
 });
