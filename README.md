@@ -54,14 +54,13 @@ The following examples illustrate the encoding scheme for various hexadecimal va
              {0 1111111}
              = 01111111
 
-### How to use this module? ###
+### How to use this? ###
 
-First, you should install this module via the apropriate [NPM](https://npmjs.org/) package:
+Install via [NPM](https://npmjs.org/):
 
     npm install sdnv
 
-The module provides a really simple API which you can use in a couple of different ways. Add it to your code as 
-usual:
+The API is really simple but you can use in a couple of different ways. Add it to your code as usual:
 
     var SDNV = require('sdnv');
 
@@ -81,6 +80,10 @@ Or, you can use the utility functions to encode or decode any buffer object on d
 In any case, you should provide a Node.js buffer object on input, unless you want the following to happen:
 
     Error: the argument should be a Buffer
+    
+### Any plans? ###
+
+Looking forward to add support for encoding and decoding of Streams.
 
 ### Any issue or enhancement? ###
 
