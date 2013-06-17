@@ -17,8 +17,13 @@ test('make sure the SDNV is valid when no buffer is passed', function (t) {
 });
 
 test('make sure the encoding works', function (t) {
-  var buffer, sdnv, encodedBuffer, expectedBuffer;
-  var runAssertions = function(ct) {
+  var runAssertions = function(input, output, ct) {
+    // setup environment
+    var buffer = input;
+    var sdnv = new SDNV(buffer);
+    var encodedBuffer = SDNV.encode(buffer);
+    var expectedBuffer = output;
+    // test the instance variable
     ct.equal(sdnv.buffer.toString('hex'), expectedBuffer.toString('hex'), 
       'the SDNV buffer should match the expected');
     // test the utility method
@@ -27,12 +32,17 @@ test('make sure the encoding works', function (t) {
     ct.end();
   };
   t.test('for the 8-bit best case scenario', function(ct) {
-    buffer = new Buffer([0x7F]);
-    sdnv = new SDNV(buffer);
-    encodedBuffer = SDNV.encode(buffer);
-    expectedBuffer = new Buffer([0x7F]);
-    runAssertions(ct);
+    runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), ct);
   });
+  t.test('for the 8-bit worst case scenario', function (ct) {
+    runAssertions(new Buffer([0x8F]), new Buffer([0x81, 0x0F]), ct);
+  });
+  t.test('for a high 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x12, 0x34]), new Buffer([0xA4, 0x34]), ct);
+  });
+  // t.test('for a low 16-bit value scenario', function (ct) {
+  //   runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0xA4, 0x34]), ct);
+  // });
   t.end();
 });
 
