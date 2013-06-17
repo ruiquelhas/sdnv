@@ -9,13 +9,6 @@ test('make sure a valid buffer results in a valid SNDV', function (t) {
   t.end();
 });
 
-test('make sure the SDNV is valid when no buffer is passed', function (t) {
-  var sdnv = new SDNV(), expectedBuffer = new Buffer(1);
-  t.ok(sdnv instanceof SDNV, 'empty buffer should result in a default SDNV');
-  t.type(sdnv.buffer, "Buffer", 'default SDNV should contain buffer data');
-  t.end();
-});
-
 test('make sure the encoding works', function (t) {
   var runAssertions = function(input, output, ct) {
     // setup environment

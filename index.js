@@ -81,26 +81,42 @@ var decodeBuffer = function (buffer) {
   return sweep(0);
 };
 
-var SDNV = function (buffer) { 
-  if (buffer !== undefined) {
-    if (buffer instanceof Buffer) {
-      this.buffer = encodeBuffer(buffer);
-    } else {
-      throw new Error('the argument should be a Buffer');
-    }
+var isSupported = function (input) {
+  return (
+    typeof input !== 'undefined' &&
+    input !== undefined && (
+      input instanceof Buffer
+    ) 
+  );
+};
+
+var SDNV = function (input) { 
+  if (isSupported(input)) {
+    this.buffer = encodeBuffer(input);
   } else {
-    this.buffer = new Buffer(1);
+    throw new Error('the argument should be a Buffer');
   }
 };
 
-SDNV.encode = function (buffer) {
-  return encodeBuffer(buffer);
+
+// Class methods (utility functions)
+
+SDNV.encode = function (input) {
+  if (isSupported(input)) {
+    return encodeBuffer(input);
+  }
+  throw new Error('the argument should be a Buffer');
 };
 
-SDNV.decode = function (buffer) {
-  return decodeBuffer(buffer);
+SDNV.decode = function (input) {
+  if (isSupported(input)) {
+    return decodeBuffer(input);
+  }
+  throw new Error('the argument should be a Buffer');
 };
 
+
+// Instance method
 SDNV.prototype.decode = function () {
   return decodeBuffer(this.buffer);
 };
