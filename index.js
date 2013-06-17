@@ -1,8 +1,10 @@
 var OCTET_MSB_VALUE = 128;
+var OCTET_SHIFT_SIZE = 7;
 var HIGH_ORDER_VALUE = 64;
-
 var OCTET_OVERFLOW = 256;
 var DOUBLE_OCTET_OVERFLOW = 65536;
+
+var INVALID_INPUT_ERROR = 'the argument should be a Buffer';
 
 var getBufferCopy = function (buffer) {
   var result = new Buffer(buffer.length);
@@ -31,14 +33,14 @@ var getBufferDecimalValue = function(buffer) {
 var encodeBuffer = function (buffer) {
   var bufferCopy = getBufferCopy(buffer);
   var x = getBufferLessSignicantSevenBits(bufferCopy);
-  var y = getBufferDecimalValue(bufferCopy) >>> 7;
+  var y = getBufferDecimalValue(bufferCopy) >> OCTET_SHIFT_SIZE;
   
   if (y === 0) return new Buffer([x]);
 
   var z = OCTET_MSB_VALUE | getBufferLessSignicantSevenBits(new Buffer([y]));
   var remaining = new Buffer([z, x]);
   
-  y = y >>> 7;
+  y = y >> OCTET_SHIFT_SIZE;
   if (y === 0) return remaining;
   
   return encodeBuffer(remaining);
@@ -68,7 +70,7 @@ var decodeBuffer = function (buffer) {
   var bufferCopy = getBufferCopy(buffer), result = 0;
   
   var sweep = function (index) {
-    result = result << 7;
+    result = result << OCTET_SHIFT_SIZE;
     var octetAsBuffer = new Buffer([bufferCopy[index]]);
     var lowOrderWord = getBufferLessSignicantSevenBits(octetAsBuffer);
     result = result + lowOrderWord;
@@ -94,7 +96,7 @@ var SDNV = function (input) {
   if (isSupported(input)) {
     this.buffer = encodeBuffer(input);
   } else {
-    throw new Error('the argument should be a Buffer');
+    throw new Error(INVALID_INPUT_ERROR);
   }
 };
 
@@ -105,14 +107,14 @@ SDNV.encode = function (input) {
   if (isSupported(input)) {
     return encodeBuffer(input);
   }
-  throw new Error('the argument should be a Buffer');
+  throw new Error(INVALID_INPUT_ERROR);
 };
 
 SDNV.decode = function (input) {
   if (isSupported(input)) {
     return decodeBuffer(input);
   }
-  throw new Error('the argument should be a Buffer');
+  throw new Error(INVALID_INPUT_ERROR);
 };
 
 
