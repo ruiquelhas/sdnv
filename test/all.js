@@ -19,15 +19,13 @@ test('make sure the SDNV is valid when no buffer is passed', function (t) {
 test('make sure the encoding works', function (t) {
   var runAssertions = function(input, output, ct) {
     // setup environment
-    var buffer = input;
-    var sdnv = new SDNV(buffer);
-    var encodedBuffer = SDNV.encode(buffer);
-    var expectedBuffer = output;
+    var sdnv = new SDNV(input);
+    var encodedBuffer = SDNV.encode(input);
     // test the instance variable
-    ct.equal(sdnv.buffer.toString('hex'), expectedBuffer.toString('hex'), 
+    ct.equal(sdnv.buffer.toString('hex'), output.toString('hex'), 
       'the SDNV buffer should match the expected');
     // test the utility method
-    ct.equal(encodedBuffer.toString('hex'), expectedBuffer.toString('hex'), 
+    ct.equal(encodedBuffer.toString('hex'), output.toString('hex'), 
       'the encoded buffer by the utility method should match the expected');
     ct.end();
   };
@@ -47,5 +45,21 @@ test('make sure the encoding works', function (t) {
 });
 
 test('make sure the decoding works', function (t) {
+  var runAssertions = function (input, output, ct) {
+    // setup environment
+    var sdnv = new SDNV(input);
+    var decodedFromSDNV = sdnv.decode();
+    var decodedFromUtility = SDNV.decode(input);
+    // test the instance method
+    ct.equal(decodedFromSDNV.toString('hex'), output.toString('hex'),
+      'the decoded SDNV buffer should match the expected');
+    // test the utility method
+    ct.equal(decodedFromUtility.toString('hex'), output.toString('hex'),
+      'the decoded buffer returned by the utility should match the expected');
+    ct.end();
+  };
+  t.test('for the 8-bit best case scenario', function (ct) {
+    runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), ct);
+  });
   t.end();
 });

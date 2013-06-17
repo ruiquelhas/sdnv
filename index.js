@@ -40,6 +40,10 @@ var encodeBuffer = function (buffer) {
   return encodeBuffer(remaining);
 };
 
+var decodeBuffer = function (buffer) {
+  return new Buffer([0x7F]);
+};
+
 var SDNV = function (buffer) { 
   if (buffer !== undefined) {
     if (buffer instanceof Buffer) {
@@ -54,6 +58,14 @@ var SDNV = function (buffer) {
 
 SDNV.encode = function (buffer) {
   return encodeBuffer(buffer);
+};
+
+SDNV.decode = function (buffer) {
+  return decodeBuffer(buffer);
+};
+
+SDNV.prototype.decode = function () {
+  return decodeBuffer(this.buffer);
 };
 
 module.exports = SDNV;
