@@ -25,7 +25,7 @@ more complex data structures.
 
 ### How do they work? ###
 
-An SDNV is a numeric value encoded in N octets, the last of which has its most significant bit (MSB) set to `0`; 
+A SDNV is a numeric value encoded in N octets, the last of which has its most significant bit (MSB) set to `0`; 
 the MSB of every other octet in the SDNV must be set to `1`.  The value encoded in an SDNV is the unsigned binary 
 number obtained by concatenating into a single bit string the 7 least significant bits of each octet of the SDNV.
 
@@ -70,12 +70,12 @@ application:
     // Using the SDNV constructor automatically wraps the encoded buffer value
     var sdnv = new SDNV(new Buffer([0x12, 0x34]);
     // Decode the wrapped value
-    sdnv.decode(); // <Buffer 12 34>
+    sdnv.decode();  // <Buffer 12 34>
 
 Or, you can use the utility functions to encode or decode any buffer object on demand:
 
-    SDNV.encode(new Buffer[0x12, 0x34])); // <Buffer a4 34>
-    SDNV.decode(new Buffer[0xa4, 0x34])); // <Buffer 12 34>
+    SDNV.encode(new Buffer[0x12, 0x34]));  // <Buffer a4 34>
+    SDNV.decode(new Buffer[0xa4, 0x34]));  // <Buffer 12 34>
 
 In any case, you should provide a Node.js buffer object on input, unless you want the following to happen:
 
