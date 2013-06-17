@@ -25,7 +25,7 @@ more complex data structures.
 
 ### How do they work? ###
 
-A SDNV is a numeric value encoded in N octets, the last of which has its most significant bit (MSB) set to `0`; 
+An SDNV is a numeric value encoded in N octets, the last of which has its most significant bit (MSB) set to `0`; 
 the MSB of every other octet in the SDNV must be set to `1`.  The value encoded in an SDNV is the unsigned binary 
 number obtained by concatenating into a single bit string the 7 least significant bits of each octet of the SDNV.
 
