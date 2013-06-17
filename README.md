@@ -12,9 +12,9 @@ SDNVs.
 
 SDNVs were created by the [DTNRG](http://www.dtnrg.org) and they aim to overcome common problems related to fixed 
 size fields in networking protocols (e.g. TPC `advertised received window` field or even the entire 
-[IPv4 header](https://en.wikipedia.org/wiki/IPv4#Header).
+[IPv4 header](https://en.wikipedia.org/wiki/IPv4#Header)).
 
-As stated in the official spec released as the [RFC 6256](http://tools.ietf.org/html/rfc6256):
+As stated in the official spec released as [RFC 6256](http://tools.ietf.org/html/rfc6256):
 
     An SDNV is simply a way of representing non-negative integers (bothpositive integers of arbitrary magnitude 
     and 0) without expending much unnecessary space.
