@@ -45,11 +45,11 @@ test('make sure the encoding works', function (t) {
 });
 
 test('make sure the decoding works', function (t) {
-  var runAssertions = function (input, output, ct) {
+  var runAssertions = function (fstInput, sndInput, output, ct) {
     // setup environment
-    var sdnv = new SDNV(input);
+    var sdnv = new SDNV(fstInput);
     var decodedFromSDNV = sdnv.decode();
-    var decodedFromUtility = SDNV.decode(input);
+    var decodedFromUtility = SDNV.decode(sndInput);
     // test the instance method
     ct.equal(decodedFromSDNV.toString('hex'), output.toString('hex'),
       'the decoded SDNV buffer should match the expected');
@@ -59,7 +59,10 @@ test('make sure the decoding works', function (t) {
     ct.end();
   };
   t.test('for the 8-bit best case scenario', function (ct) {
-    runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), ct);
+    runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), new Buffer([0x7F]), ct);
   });
+  // t.test('for the 8-bit worst case scenario', function (ct) {
+  //   runAssertions(new Buffer([0x8F]), new Buffer([0x81, 0x0F]), new Buffer([0x8F]), ct);
+  // });
   t.end();
 });
