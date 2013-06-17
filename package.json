@@ -1,8 +1,11 @@
 {
   "name": "sdnv",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Self-Delimiting Numeric Value Codec",
   "main": "index.js",
+  "devDependencies": {
+    "tap": "~0.4.3"
+  },
   "scripts": {
     "test": "tap test/*.js"
   },
@@ -24,6 +27,9 @@
     "url": "http://about.me/ruiquelhas"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=0.10.10"
+  },
   "gitHead": "28aa839ccc8030e2c57765099a4a42534b6c4e09",
   "readmeFilename": "README.md",
   "bugs": {
