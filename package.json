@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=0.10.10"
+    "node": ">=0.10.9"
   },
   "gitHead": "28aa839ccc8030e2c57765099a4a42534b6c4e09",
   "readmeFilename": "README.md",
