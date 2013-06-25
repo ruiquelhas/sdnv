@@ -16,8 +16,8 @@ of fixed size fields in networking protocols (e.g. TPC `advertised received wind
 
 As stated in the official spec released as [RFC 6256](http://tools.ietf.org/html/rfc6256):
 
-    An SDNV is simply a way of representing non-negative integers (both positive integers of arbitrary magnitude 
-    and 0) without expending much unnecessary space.
+    An SDNV is simply a way of representing non-negative integers (both positive integers of 
+    arbitrary magnitude and 0) without expending much unnecessary space.
 
 SDNVs closely resemble certain constructs with [ASN.1](http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One) 
 but they are focused exclusively on numeric strings or bistrings unlike the latter which was developed for encoding 
