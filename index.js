@@ -1,4 +1,4 @@
-var stream = require('stream');
+var Transform = require('stream').Transform;
 
 var OCTET_MSB_VALUE = 128;
 var OCTET_SHIFT_SIZE = 7;
@@ -94,6 +94,15 @@ var isSupported = function (input) {
   );
 };
 
+var getTransformStream = function (fn) {
+  var stream = new Transform();
+  stream._transform = function(chunk, encoding, done) {
+    stream.push(fn(chunk));
+    done();
+  };
+  return stream;
+};
+
 var SDNV = function (input) {
   var self;
   
@@ -127,13 +136,12 @@ SDNV.decode = function (input) {
   throw new Error(INVALID_INPUT_ERROR);
 };
 
-SDNV.createReadStream = function (source) {
-  var encoder = new stream.Transform();
-  encoder._transform = function(chunk, encoding, done) {
-    encoder.push(encodeBuffer(chunk));
-    done();
-  };
-  return encoder;
+SDNV.createReadStream = function () {
+  return getTransformStream(encodeBuffer);
+};
+
+SDNV.createWriteStream = function () {
+  return getTransformStream(decodeBuffer);
 };
 
 module.exports = SDNV;

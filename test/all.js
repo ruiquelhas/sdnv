@@ -69,7 +69,7 @@ test('make sure the decoding works', function (t) {
 test('make sure the encoding works when piping a readable stream', function (t) {
   var runAssertions = function (input, output, ct) {
     var src = new Stream();
-    var encoder = SDNV.createReadStream(src);
+    var encoder = SDNV.createReadStream();
     src.pipe(encoder);
     encoder.on('readable', function () {
       ct.equal(encoder.read().toString('hex'), output.toString('hex'), 
