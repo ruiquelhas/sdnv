@@ -4,9 +4,9 @@ SDNV
 Self-Delimiting Numeric Value Codec
 -----------------------------------
 
-Node.js wrapper for [Self-Delimiting Numeric Values](http://www.dtnrg.org/wiki/SDNV) (SDNVs). Provides a base class 
-to use SDNVs in Node programs and appropriate utility functions to encode and decode native buffers to and from 
-SDNVs.
+This package allows you to use [Self-Delimiting Numeric Values](http://www.dtnrg.org/wiki/SDNV) (SDNVs) in Node.js 
+programs. It is basically a wrapper class that encloses basic Node Buffers encoded as SDNVs. Additionaly, it also 
+provides you utility functions to encode and decode a Buffer on-demand.
 
 ### What are SDNVs? ###
 
@@ -87,4 +87,5 @@ Looking forward to add support for encoding and decoding of Streams.
 
 ### Any issue or enhancement? ###
 
-You know the [drill](https://github.com/ruiquelhas/sdnv/issues/new). However, you should also know that [Pull Requests](https://github.com/ruiquelhas/sdnv/pulls) are great!
+You know the [drill](https://github.com/ruiquelhas/sdnv/issues/new). However, you should also know 
+that [Pull Requests](https://github.com/ruiquelhas/sdnv/pulls) are great!
