@@ -1,3 +1,5 @@
+var Stream = require('stream');
+
 var OCTET_MSB_VALUE = 128;
 var OCTET_SHIFT_SIZE = 7;
 var HIGH_ORDER_VALUE = 64;
@@ -123,6 +125,18 @@ SDNV.decode = function (input) {
     return decodeBuffer(input);
   }
   throw new Error(INVALID_INPUT_ERROR);
+};
+
+SDNV.createReadStream = function (source) {
+  var encoder = new Stream();
+  encoder.readable = true;
+  source.on('data', function (chunk) {
+    encoder.emit('data', encodeBuffer(chunk));
+  });
+  source.on('end', function () {
+    encoder.emit('end');
+  });
+  return encoder;
 };
 
 module.exports = SDNV;

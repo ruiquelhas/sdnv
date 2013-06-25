@@ -1,5 +1,6 @@
 var 
   test = require('tap').test,
+  Stream = require('stream'),
   SDNV = require('../index');
 
 test('make sure a valid buffer results in a valid SNDV', function (t) {
@@ -62,5 +63,36 @@ test('make sure the decoding works', function (t) {
   t.test('for a low 16-bit value scenario', function (ct) {
     runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0x95, 0x3C]), new Buffer([0x0A, 0xBC]), ct);
   });
+  t.end();
+});
+
+test('make sure the encoding works when piping a readable stream', function (t) {
+  var runAssertions = function (input, output, ct) {
+    var src = new Stream();
+    var encoder = SDNV.createReadStream(src);
+    encoder.on('data', function (chunk) {
+      ct.equal(chunk.toString('hex'), output.toString('hex'), 
+        'the emitted data buffer should match the expected');
+      ct.end();
+    });
+    src.emit('data', input);
+    src.emit('end');
+  };
+  t.test('for the 8-bit best case scenario', function (ct) {
+    runAssertions(new Buffer([0x7F]), new Buffer([0x7F]), ct);
+  });
+  t.test('for the 8-bit worst case scenario', function (ct) {
+    runAssertions(new Buffer([0x8F]), new Buffer([0x81, 0x0F]), ct);
+  });
+  t.test('for a high 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x12, 0x34]), new Buffer([0xA4, 0x34]), ct);
+  });
+  t.test('for a low 16-bit value scenario', function (ct) {
+    runAssertions(new Buffer([0x0A, 0xBC]), new Buffer([0x95, 0x3C]), ct);
+  });
+  t.end();
+});
+
+test('make sure the decoding works when piping a writable stream', function (t) {
   t.end();
 });
