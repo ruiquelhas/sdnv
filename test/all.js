@@ -70,8 +70,9 @@ test('make sure the encoding works when piping a readable stream', function (t) 
   var runAssertions = function (input, output, ct) {
     var src = new Stream();
     var encoder = SDNV.createReadStream(src);
-    encoder.on('data', function (chunk) {
-      ct.equal(chunk.toString('hex'), output.toString('hex'), 
+    src.pipe(encoder);
+    encoder.on('readable', function () {
+      ct.equal(encoder.read().toString('hex'), output.toString('hex'), 
         'the emitted data buffer should match the expected');
       ct.end();
     });

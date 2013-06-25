@@ -1,4 +1,4 @@
-var Stream = require('stream');
+var stream = require('stream');
 
 var OCTET_MSB_VALUE = 128;
 var OCTET_SHIFT_SIZE = 7;
@@ -128,14 +128,11 @@ SDNV.decode = function (input) {
 };
 
 SDNV.createReadStream = function (source) {
-  var encoder = new Stream();
-  encoder.readable = true;
-  source.on('data', function (chunk) {
-    encoder.emit('data', encodeBuffer(chunk));
-  });
-  source.on('end', function () {
-    encoder.emit('end');
-  });
+  var encoder = new stream.Transform();
+  encoder._transform = function(chunk, encoding, done) {
+    encoder.push(encodeBuffer(chunk));
+    done();
+  };
   return encoder;
 };
 
