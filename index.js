@@ -92,12 +92,20 @@ var isSupported = function (input) {
   );
 };
 
-var SDNV = function (input) { 
+var SDNV = function (input) {
+  var self;
+  
   if (isSupported(input)) {
-    this.buffer = encodeBuffer(input);
+    self = encodeBuffer(input);
   } else {
     throw new Error(INVALID_INPUT_ERROR);
   }
+
+  self.decode = function () {
+    return decodeBuffer(self);
+  }
+
+  return self;
 };
 
 
@@ -115,12 +123,6 @@ SDNV.decode = function (input) {
     return decodeBuffer(input);
   }
   throw new Error(INVALID_INPUT_ERROR);
-};
-
-
-// Instance method
-SDNV.prototype.decode = function () {
-  return decodeBuffer(this.buffer);
 };
 
 module.exports = SDNV;

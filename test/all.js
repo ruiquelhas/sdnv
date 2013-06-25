@@ -4,8 +4,7 @@ var
 
 test('make sure a valid buffer results in a valid SNDV', function (t) {
   var buffer = new Buffer([0x0A, 0xBC]), sdnv = new SDNV(buffer);
-  t.ok(sdnv instanceof SDNV, 'should be able to create an SDNV instance');
-  t.type(sdnv.buffer, "Buffer", 'should contain buffer data');
+  t.type(sdnv, "Buffer", 'should contain buffer data');
   t.end();
 });
 
@@ -15,7 +14,7 @@ test('make sure the encoding works', function (t) {
     var sdnv = new SDNV(input);
     var encodedBuffer = SDNV.encode(input);
     // test the instance variable
-    ct.equal(sdnv.buffer.toString('hex'), output.toString('hex'), 
+    ct.equal(sdnv.toString('hex'), output.toString('hex'), 
       'the SDNV buffer should match the expected');
     // test the utility method
     ct.equal(encodedBuffer.toString('hex'), output.toString('hex'), 
