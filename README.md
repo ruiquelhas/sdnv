@@ -83,15 +83,14 @@ In any case, you should provide a Node.js buffer object on input, unless you wan
     
 Also, you can create both encoding and decoding Transform Streams and pipe those to other ones:
 
+    // create some source stream (don't forget to emit data and "end" it later)
     var Stream = require('stream');
-    // create some source stream
     var source = new Stream();
     // use the API to create encoding or decoding streams
     var encoder = SDNV.createEncodeStream();
     var decoder = SDNV.createDecodeStream();
     // pipe them (in this case, the output should match the input)
     source.pipe(encoder).pipe(decoder);
-    // don't forget to emit data on the source stream and "end" it
     
 ### Any plans? ###
 
