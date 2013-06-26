@@ -60,7 +60,7 @@ Install via [NPM](https://npmjs.org/):
 
     npm install sdnv
 
-The API is really simple but you can use in a couple of different ways. Add it to your code as usual:
+The API is really simple but you can use it in a few different ways. Add it to your code as usual:
 
     var SDNV = require('sdnv');
 
@@ -81,9 +81,21 @@ In any case, you should provide a Node.js buffer object on input, unless you wan
 
     Error: the argument should be a Buffer
     
+Also, you can create both encoding and decoding Transform Streams and pipe those to other ones:
+
+    var Stream = require('stream');
+    // create some source stream
+    var source = new Stream();
+    // use the API to create encoding or decoding streams
+    var encoder = SDNV.createEncodeStream();
+    var decoder = SDNV.createDecodeStream();
+    // pipe them (in this case, the output should match the input)
+    source.pipe(encoder).pipe(decoder);
+    // don't forget to emit data on the source stream and "end" it
+    
 ### Any plans? ###
 
-Looking forward to add support for encoding and decoding of Streams.
+I will be waiting for your feedback.
 
 ### Any issue or enhancement? ###
 
