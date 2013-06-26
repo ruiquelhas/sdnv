@@ -44,6 +44,12 @@ var tearDown = function (over, planned) {
   }
 };
 
+var emitDataAndTearDown = function (aStream, data) {
+  aStream.emit('data', data);
+  aStream.emit('end');
+  tearDown();
+};
+
 var sweepTestVector = function (t, assert) {
   t.plan(4);
   t.test('for the 8-bit best case scenario', function (t) {
@@ -113,7 +119,7 @@ test('make sure the decoding works on regular Buffer objects', function (t) {
   });
 });
 
-test('make sure the encoding works when piping a stream', function (t) {
+test('make sure the encoding works when reading from a stream', function (t) {
   sweepTestVector(t, function (t, options) {
     setUp(options);
     source.pipe(encoder);
@@ -122,14 +128,11 @@ test('make sure the encoding works when piping a stream', function (t) {
       t.equal(encoder.read().toString('hex'), options.encoded.toString('hex'), 
         'the emitted data buffer should match the expected');
     });
-    source.emit('data', options.decoded);
-    source.emit('end');
-    // this ensures all the events are emitted before tearDown
-    tearDown();
+    emitDataAndTearDown(source, options.decoded);
   });
 });
 
-test('make sure the decoding works when piping a stream', function (t) {
+test('make sure the decoding works when reading from a stream', function (t) {
   sweepTestVector(t, function (t, options) {
     setUp(options);
     source.pipe(decoder);
@@ -138,9 +141,19 @@ test('make sure the decoding works when piping a stream', function (t) {
       t.equal(decoder.read().toString('hex'), options.decoded.toString('hex'), 
         'the emitted data buffer should match the expected');
     });
-    source.emit('data', options.encoded);
-    source.emit('end');
-    // this ensures all the events are emitted before tearDown
-    tearDown();
+    emitDataAndTearDown(source, options.encoded);
+  });
+});
+
+test('make sure the output matches the input when piping streams', function (t) {
+  sweepTestVector(t, function (t, options) {
+    setUp(options);
+    source.pipe(encoder).pipe(decoder);
+    decoder.on('data', function (chunk) {
+      t.plan(1);
+      t.equal(chunk.toString('hex'), options.decoded.toString('hex'), 
+        'the emitted data buffer should match the expected');
+    });
+    emitDataAndTearDown(source, options.decoded);
   });
 });

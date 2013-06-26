@@ -116,7 +116,7 @@ var SDNV = function (input) {
 
   self.decode = function () {
     return decodeBuffer(self);
-  }
+  };
 
   return self;
 };
