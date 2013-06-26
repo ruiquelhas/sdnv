@@ -97,8 +97,10 @@ var isSupported = function (input) {
 var getTransformStream = function (fn) {
   var stream = new Transform();
   stream._transform = function(chunk, encoding, done) {
-    stream.push(fn(chunk));
-    done();
+    if (isSupported(chunk)) {
+      return done(null, fn(chunk));
+    }
+    return done(new Error(INVALID_INPUT_ERROR));
   };
   return stream;
 };
