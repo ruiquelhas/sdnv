@@ -136,11 +136,11 @@ SDNV.decode = function (input) {
   throw new Error(INVALID_INPUT_ERROR);
 };
 
-SDNV.createReadStream = function () {
+SDNV.createEncodeStream = function () {
   return getTransformStream(encodeBuffer);
 };
 
-SDNV.createWriteStream = function () {
+SDNV.createDecodeStream = function () {
   return getTransformStream(decodeBuffer);
 };
 
