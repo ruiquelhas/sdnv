@@ -1,4 +1,4 @@
-SDNV
+SDNV [![Build Status](https://travis-ci.org/ruiquelhas/sdnv.png)](https://travis-ci.org/ruiquelhas/sdnv)
 ====
 
 Self-Delimiting Numeric Value Codec
