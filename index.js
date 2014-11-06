@@ -36,15 +36,19 @@ var encodeBuffer = function (buffer) {
   var bufferCopy = getBufferCopy(buffer);
   var x = getBufferLessSignicantSevenBits(bufferCopy);
   var y = getBufferDecimalValue(bufferCopy) >> OCTET_SHIFT_SIZE;
-  
-  if (y === 0) return new Buffer([x]);
+
+  if (y === 0) {
+    return new Buffer([x]);
+  }
 
   var z = OCTET_MSB_VALUE | getBufferLessSignicantSevenBits(new Buffer([y]));
   var remaining = new Buffer([z, x]);
-  
+
   y = y >> OCTET_SHIFT_SIZE;
-  if (y === 0) return remaining;
-  
+  if (y === 0) {
+    return remaining;
+  }
+
   return encodeBuffer(remaining);
 };
 
@@ -70,8 +74,8 @@ var getVariableLengthBuffer = function (decimalValue) {
 
 var decodeBuffer = function (buffer) {
   var bufferCopy = getBufferCopy(buffer), result = 0;
-  
-  var sweep = function (index) {
+
+  var _decodeBuffer = function (index) {
     result = result << OCTET_SHIFT_SIZE;
     var octetAsBuffer = new Buffer([bufferCopy[index]]);
     var lowOrderWord = getBufferLessSignicantSevenBits(octetAsBuffer);
@@ -79,10 +83,10 @@ var decodeBuffer = function (buffer) {
     if (lowOrderWord >= HIGH_ORDER_VALUE || index === bufferCopy.length - 1) {
       return getVariableLengthBuffer(result);
     }
-    return sweep(index + 1);
+    return _decodeBuffer(index + 1);
   };
 
-  return sweep(0);
+  return _decodeBuffer(0);
 };
 
 var isSupported = function (input) {
@@ -90,7 +94,7 @@ var isSupported = function (input) {
     typeof input !== 'undefined' &&
     input !== undefined && (
       input instanceof Buffer
-    ) 
+    )
   );
 };
 
@@ -107,7 +111,7 @@ var getTransformStream = function (fn) {
 
 var SDNV = function (input) {
   var self;
-  
+
   if (isSupported(input)) {
     self = encodeBuffer(input);
   } else {

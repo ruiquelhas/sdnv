@@ -1,6 +1,6 @@
 {
   "name": "sdnv",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Self-Delimiting Numeric Value Codec",
   "main": "index.js",
   "devDependencies": {
@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=0.10.9"
+    "node": ">=0.10.33"
   },
   "gitHead": "28aa839ccc8030e2c57765099a4a42534b6c4e09",
   "readmeFilename": "README.md",

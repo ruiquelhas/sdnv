@@ -1,7 +1,7 @@
-var 
-  test = require('tap').test,
-  Stream = require('stream'),
-  SDNV = require('../index');
+var test = require('tap').test;
+var Stream = require('stream');
+
+var SDNV = require('../');
 
 var sdnv, decoded, encoded, encoder, decoder, source;
 
@@ -70,7 +70,7 @@ test('make sure a valid buffer results in a valid SNDV', function (t) {
   sweepTestVector(t, function (t, options) {
     t.plan(1);
     setUp(options);
-    t.type(sdnv, "Buffer", 'should contain buffer data');
+    t.type(sdnv, 'Buffer', 'should contain buffer data');
     tearDown();
   });
 });
@@ -89,7 +89,7 @@ test('make sure the encoding works on regular Buffer objects', function (t) {
     });
     t.test('with the encoding utility method', function (t) {
       t.plan(1);
-      t.equal(encoded.toString('hex'), options.encoded.toString('hex'), 
+      t.equal(encoded.toString('hex'), options.encoded.toString('hex'),
         'the buffer encoded by the utility method should match the expected');
       testNumber += 1;
       tearDown(testNumber, testPlan);
@@ -111,7 +111,7 @@ test('make sure the decoding works on regular Buffer objects', function (t) {
     });
     t.test('with the encoding utility method', function (t) {
       t.plan(1);
-      t.equal(decoded.toString('hex'), options.decoded.toString('hex'), 
+      t.equal(decoded.toString('hex'), options.decoded.toString('hex'),
         'the buffer decoded by the utility method should match the expected');
       testNumber += 1;
       tearDown(testNumber, testPlan);
@@ -125,7 +125,7 @@ test('make sure the encoding works when reading from a stream', function (t) {
     source.pipe(encoder);
     encoder.on('readable', function () {
       t.plan(1);
-      t.equal(encoder.read().toString('hex'), options.encoded.toString('hex'), 
+      t.equal(encoder.read().toString('hex'), options.encoded.toString('hex'),
         'the emitted data buffer should match the expected');
     });
     emitDataAndTearDown(source, options.decoded);
@@ -138,7 +138,7 @@ test('make sure the decoding works when reading from a stream', function (t) {
     source.pipe(decoder);
     decoder.on('readable', function () {
       t.plan(1);
-      t.equal(decoder.read().toString('hex'), options.decoded.toString('hex'), 
+      t.equal(decoder.read().toString('hex'), options.decoded.toString('hex'),
         'the emitted data buffer should match the expected');
     });
     emitDataAndTearDown(source, options.encoded);
@@ -151,7 +151,7 @@ test('make sure the output matches the input when piping streams', function (t) 
     source.pipe(encoder).pipe(decoder);
     decoder.on('data', function (chunk) {
       t.plan(1);
-      t.equal(chunk.toString('hex'), options.decoded.toString('hex'), 
+      t.equal(chunk.toString('hex'), options.decoded.toString('hex'),
         'the emitted data buffer should match the expected');
     });
     emitDataAndTearDown(source, options.decoded);
