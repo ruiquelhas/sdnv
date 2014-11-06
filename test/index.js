@@ -33,34 +33,24 @@ var setUp = function (options) {
   source = new Stream();
 };
 
-var tearDown = function (over, planned) {
-  if (arguments.length === 0 || over === planned) {
-    source = null;
-    decoder = null;
-    encoder = null;
-    decoded = null;
-    encoded = null;
-    sdnv = null;
-  }
-};
-
-var emitDataAndTearDown = function (aStream, data) {
+var emitAndClose = function (aStream, data) {
   aStream.emit('data', data);
   aStream.emit('end');
-  tearDown();
 };
 
 var sweepTestVector = function (t, assert) {
-  t.plan(4);
   t.test('for the 8-bit best case scenario', function (t) {
     assert(t, testVector.eightBitBestCase);
   });
+
   t.test('for the 8-bit worst case scenario', function (t) {
     assert(t, testVector.eightBitWorstCase);
   });
+
   t.test('for a high 16-bit value scenario', function (t) {
     assert(t, testVector.highSixteenBitCase);
   });
+
   t.test('for a low 16-bit value scenario', function (t) {
     assert(t, testVector.lowSixteenBitCase);
   });
@@ -68,53 +58,44 @@ var sweepTestVector = function (t, assert) {
 
 test('make sure a valid buffer results in a valid SNDV', function (t) {
   sweepTestVector(t, function (t, options) {
-    t.plan(1);
     setUp(options);
     t.type(sdnv, 'Buffer', 'should contain buffer data');
-    tearDown();
+    t.end();
   });
 });
 
 test('make sure the encoding works on regular Buffer objects', function (t) {
   sweepTestVector(t, function (t, options) {
-    var testNumber = 0, testPlan = 2;
-    t.plan(testPlan);
     setUp(options);
+
     t.test('with the encoding wrapper', function (t) {
-      t.plan(1);
       t.equal(sdnv.toString('hex'), options.encoded.toString('hex'),
         'the buffer wrapped by the SDNV should match the expected');
-      testNumber += 1;
-      tearDown(testNumber, testPlan);
+      t.end();
     });
+
     t.test('with the encoding utility method', function (t) {
-      t.plan(1);
       t.equal(encoded.toString('hex'), options.encoded.toString('hex'),
         'the buffer encoded by the utility method should match the expected');
-      testNumber += 1;
-      tearDown(testNumber, testPlan);
+      t.end();
     });
   });
 });
 
 test('make sure the decoding works on regular Buffer objects', function (t) {
   sweepTestVector(t, function (t, options) {
-    var testNumber = 0, testPlan = 2;
-    t.plan(testPlan);
     setUp(options);
+
     t.test('with the encoding wrapper', function (t) {
-      t.plan(1);
       t.equal(sdnv.decode().toString('hex'), options.decoded.toString('hex'),
         'the buffer decoded by the instance method should match the expected');
-      testNumber += 1;
-      tearDown(testNumber, testPlan);
+      t.end();
     });
+
     t.test('with the encoding utility method', function (t) {
-      t.plan(1);
       t.equal(decoded.toString('hex'), options.decoded.toString('hex'),
         'the buffer decoded by the utility method should match the expected');
-      testNumber += 1;
-      tearDown(testNumber, testPlan);
+      t.end();
     });
   });
 });
@@ -122,38 +103,44 @@ test('make sure the decoding works on regular Buffer objects', function (t) {
 test('make sure the encoding works when reading from a stream', function (t) {
   sweepTestVector(t, function (t, options) {
     setUp(options);
-    source.pipe(encoder);
-    encoder.on('readable', function () {
-      t.plan(1);
-      t.equal(encoder.read().toString('hex'), options.encoded.toString('hex'),
+
+    encoder.on('data', function (buff) {
+      t.equal(buff.toString('hex'), options.encoded.toString('hex'),
         'the emitted data buffer should match the expected');
+      t.end();
     });
-    emitDataAndTearDown(source, options.decoded);
+    source.pipe(encoder);
+
+    emitAndClose(source, options.decoded);
   });
 });
 
 test('make sure the decoding works when reading from a stream', function (t) {
   sweepTestVector(t, function (t, options) {
     setUp(options);
-    source.pipe(decoder);
-    decoder.on('readable', function () {
-      t.plan(1);
-      t.equal(decoder.read().toString('hex'), options.decoded.toString('hex'),
+
+    decoder.on('data', function (buff) {
+      t.equal(buff.toString('hex'), options.decoded.toString('hex'),
         'the emitted data buffer should match the expected');
+      t.end();
     });
-    emitDataAndTearDown(source, options.encoded);
+    source.pipe(decoder);
+
+    emitAndClose(source, options.encoded);
   });
 });
 
 test('make sure the output matches the input when piping streams', function (t) {
   sweepTestVector(t, function (t, options) {
     setUp(options);
-    source.pipe(encoder).pipe(decoder);
-    decoder.on('data', function (chunk) {
-      t.plan(1);
-      t.equal(chunk.toString('hex'), options.decoded.toString('hex'),
+
+    decoder.on('data', function (buff) {
+      t.equal(buff.toString('hex'), options.decoded.toString('hex'),
         'the emitted data buffer should match the expected');
+      t.end();
     });
-    emitDataAndTearDown(source, options.decoded);
+    source.pipe(encoder).pipe(decoder);
+
+    emitAndClose(source, options.decoded);
   });
 });
