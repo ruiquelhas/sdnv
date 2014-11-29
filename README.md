@@ -58,32 +58,21 @@ The following examples illustrate the encoding scheme for various hexadecimal va
 
 ### Using the package
 
-Install via [NPM](https://npmjs.org/):
-
-```
-$ npm install sdnv
-```
-
-You can create a new SDNV instance with the buffer object you wish to encode, and use the wrapper throughout your 
-application:
-
 ```javascript
 var SDNV = require('sdnv');
+
 // Using the SDNV constructor automatically wraps the encoded buffer value
 var sdnv = new SDNV(new Buffer([0x12, 0x34]);
+
 // Decode the wrapped value
 sdnv.decode();  // <Buffer 12 34>
-```
 
-Or, you can use the utility functions to encode or decode any buffer object on demand:
-
-```javascript
-var SDNV = require('sdnv');
+// Utility functions are also available
 SDNV.encode(new Buffer[0x12, 0x34]));  // <Buffer a4 34>
 SDNV.decode(new Buffer[0xa4, 0x34]));  // <Buffer 12 34>
 ```
 
-In any case, you should provide a Node.js buffer object on input, unless you want the following to happen:
+You should provide a Node.js buffer object on input, unless you want the following to happen:
 
 ```
 Error: the argument should be a Buffer
@@ -93,12 +82,15 @@ Also, you can create both encoding and decoding Transform Streams and pipe those
 
 ```javascript
 var SDNV = require('sdnv');
+
 // create some source stream (don't forget to emit data and "end" it later)
 var Stream = require('stream');
 var source = new Stream();
+
 // use the API to create encoding or decoding streams
 var encoder = SDNV.createEncodeStream();
 var decoder = SDNV.createDecodeStream();
+
 // pipe them (in this case, the output should match the input)
 source.pipe(encoder).pipe(decoder);
 ```
