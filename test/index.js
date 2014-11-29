@@ -1,7 +1,7 @@
 var test = require('tap').test;
 var Stream = require('stream');
 
-var SDNV = require('../lib');
+var SDNV = require('../');
 
 var sdnv, decoded, encoded, encoder, decoder, source;
 
